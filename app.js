@@ -203,6 +203,10 @@
     var html = '<div class="detalhe-corpo">';
     html += '<p class="veredito veredito-' + av.nivel + '"><strong>' + NIVEIS[av.nivel].rotulo + " para o seu caso.</strong> " + esc(textoNivel(av.nivel)) + "</p>";
     html += "<p>" + esc(food.nota) + "</p>";
+    var beneficio = (window.BENEFICIOS || {})[food.nome];
+    if (beneficio) {
+      html += '<div class="beneficio"><h3>Benefícios nutricionais</h3><p>' + esc(beneficio) + "</p></div>";
+    }
     av.avisos.concat(extras).forEach(function (a) { html += '<p class="aviso">' + esc(a) + "</p>"; });
     html += tagsHtml(food);
     html += '<div class="fases" role="group" aria-label="Classificação em cada fase">';
