@@ -72,6 +72,8 @@ body {
 }
 
 .topo { background: var(--accent); color: var(--accent-contrast); padding: 22px 0 18px; }
+.topo-linha { display: flex; align-items: center; gap: 14px; }
+.logo { flex: none; width: 64px; height: 64px; }
 .topo h1 { margin: 0 0 4px; font-size: 1.7rem; line-height: 1.2; }
 .topo .sub { margin: 0; opacity: 0.92; font-size: 0.97rem; }
 

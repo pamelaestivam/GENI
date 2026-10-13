@@ -1,5 +1,5 @@
 /* Modo offline: guarda os arquivos do app e atualiza em segundo plano a cada visita. */
-var CACHE = "posso-comer-v4";
+var CACHE = "posso-comer-v5";
 var ARQUIVOS = [
   "./",
   "index.html",
@@ -9,6 +9,7 @@ var ARQUIVOS = [
   "app.js",
   "manifest.webmanifest",
   "icons/icon.svg",
+  "icons/flor.svg",
   "icons/icon-192.png",
   "icons/icon-512.png",
   "icons/icon-maskable-512.png",
