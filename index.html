@@ -6,6 +6,12 @@
   <meta name="color-scheme" content="light dark">
   <meta name="description" content="Guia de alimentação da Geni: pesquise um alimento e veja se ele é indicado para o seu caso.">
   <title>Posso comer? Guia da Geni</title>
+  <meta name="theme-color" content="#1f6f5a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Posso comer?">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -30,13 +36,7 @@
         <label class="opcao"><input type="radio" name="fase" value="2" data-perfil="fase"> <span><strong>Fase 2</strong> · reintrodução gradual de fibras (só com liberação da equipe)</span></label>
       </fieldset>
 
-      <fieldset>
-        <legend>Qual é o seu estoma? (quando souber, escolha aqui)</legend>
-        <label class="opcao"><input type="radio" name="estoma" value="ileostomia" data-perfil="estoma"> <span>Ileostomia</span></label>
-        <label class="opcao"><input type="radio" name="estoma" value="colostomia" data-perfil="estoma"> <span>Colostomia</span></label>
-        <label class="opcao"><input type="radio" name="estoma" value="naosei" data-perfil="estoma"> <span>Ainda não sei</span></label>
-        <p class="ajuda" id="aviso-estoma" hidden>Sem essa informação, na Fase 2 o app usa a regra mais cautelosa (a da ileostomia).</p>
-      </fieldset>
+      <p class="ajuda" id="nota-fase2" hidden>Na colostomia, as fibras ajudam a dar forma às fezes e a regular o intestino, então na Fase 2 a meta é aumentá-las aos poucos, com água suficiente. Um guia americano cita 20 a 25 g de fibra por dia para mulheres e 25 a 35 g para homens depois da recuperação; confirme a meta com o nutricionista.</p>
 
       <p class="ajuda">A Fase 2 só começa com a liberação da sua equipe de saúde. Se houver mudança no tratamento, como quimioterapia, siga o plano que a equipe passar.</p>
     </details>
@@ -72,7 +72,7 @@
         <li>Cólica abdominal forte com barriga inchada, náuseas ou vômitos, e saída do estoma ausente ou muito reduzida (possível obstrução).</li>
         <li>Estoma escuro, roxo ou muito inchado, ou sangramento importante.</li>
         <li>Febre, tontura intensa, desmaio ou urina muito escura e escassa (desidratação).</li>
-        <li>Saída líquida em grande volume por mais de um dia, principalmente na ileostomia.</li>
+        <li>Saída líquida em grande volume por mais de um dia.</li>
       </ul>
       <p>Fale com a equipe, sem urgência, se houver perda de peso, falta de apetite persistente, pele ferida ao redor do estoma ou dúvida sobre algum alimento. Não use laxantes nem antidiarreicos sem orientação.</p>
     </details>
@@ -83,7 +83,7 @@
         <li>Faça seis refeições pequenas por dia (três principais e três lanches), com proteína em todas.</li>
         <li>Mastigue bem e coma devagar. Evite canudo, refrigerante e chiclete, que aumentam os gases.</li>
         <li>Teste <strong>um alimento novo por vez</strong>, em porção pequena, bem cozido e bem mastigado. Espere 1 a 2 horas para ver a reação e teste de novo antes de descartá-lo.</li>
-        <li>Beba 8 a 10 copos de 200 mL por dia, em goles pequenos; na ileostomia a necessidade costuma ser maior. Com o passar dos anos a sede diminui, então beba aos poucos mesmo sem sentir sede. Sinais de desidratação: sede intensa, boca seca, urina escura ou pouca, tontura e câimbras.</li>
+        <li>Beba 8 a 10 copos de 200 mL por dia, em goles pequenos. Com o passar dos anos a sede diminui, então beba aos poucos mesmo sem sentir sede. Sinais de desidratação: sede intensa, boca seca, urina escura ou pouca, tontura e câimbras.</li>
         <li>Use sal normal na comida, a menos que o médico restrinja.</li>
         <li>Anote os alimentos novos e as reações do estoma e leve às consultas.</li>
       </ul>
@@ -91,11 +91,18 @@
   </main>
 
   <footer class="rodape conteudo">
-    <p><strong>Importante:</strong> este app é um guia informativo e <strong>não substitui</strong> o médico, o estomaterapeuta ou o nutricionista. Eles ajustam a alimentação ao tipo de estoma, ao trecho de intestino retirado, ao tratamento e a doenças como diabetes ou problemas renais. A tolerância varia de pessoa para pessoa.</p>
-    <p>Baseado no “Plano Alimentar Semanal para Pessoa Estomizada (pós-ressecção intestinal)”, que reúne orientações de serviços de nutrição, hospitais e associações de estomizados. Alimentos que não aparecem nesse plano são marcados como estimados.</p>
+    <p><strong>Importante:</strong> este app é um guia informativo e <strong>não substitui</strong> o médico, o estomaterapeuta ou o nutricionista. Eles ajustam a alimentação ao trecho de intestino retirado, ao tratamento e a doenças como diabetes ou problemas renais. A tolerância varia de pessoa para pessoa.</p>
+    <p>Baseado no “Plano Alimentar Semanal para Pessoa Estomizada (pós-ressecção intestinal)”, que reúne orientações de serviços de nutrição, hospitais e associações de estomizados. Alimentos que não aparecem nesse plano aparecem marcados como “sugestão” e não foram revisados por um profissional de saúde.</p>
   </footer>
 
   <script src="foods.js"></script>
   <script src="app.js"></script>
+  <script>
+    if ("serviceWorker" in navigator && /^https?:$/.test(location.protocol)) {
+      window.addEventListener("load", function () {
+        navigator.serviceWorker.register("sw.js").catch(function () { /* sem modo offline */ });
+      });
+    }
+  </script>
 </body>
 </html>

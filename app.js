@@ -3,7 +3,7 @@
 
   var ALIMENTOS = window.ALIMENTOS;
   var GRUPOS = window.GRUPOS;
-  var STORAGE_KEY = "posso-comer-geni:perfil:v1";
+  var STORAGE_KEY = "posso-comer-geni:perfil:v2";
 
   var NIVEIS = {
     I: { rotulo: "Indicado", icone: "✓", ordem: 0 },
@@ -63,14 +63,11 @@
   }
 
   function carregarPerfil() {
-    var padrao = { fase: "1", estoma: "naosei" };
+    var padrao = { fase: "1" };
     try {
       var salvo = JSON.parse(localStorage.getItem(STORAGE_KEY));
       if (salvo && typeof salvo === "object") {
-        return {
-          fase: salvo.fase === "2" ? "2" : "1",
-          estoma: ["ileostomia", "colostomia", "naosei"].indexOf(salvo.estoma) >= 0 ? salvo.estoma : "naosei"
-        };
+        return { fase: salvo.fase === "2" ? "2" : "1" };
       }
     } catch (e) { /* armazenamento indisponível: segue com o padrão */ }
     return padrao;
@@ -84,9 +81,9 @@
 
   function piorNivel(a, b) { return NIVEIS[a].ordem >= NIVEIS[b].ordem ? a : b; }
 
-  // Retorna { nivel, avisos } do alimento para um perfil (fase e tipo de estoma).
+  // Retorna { nivel, avisos } do alimento para a fase do perfil (colostomia).
   function avaliar(food, p) {
-    var idx = p.fase === "1" ? 0 : (p.estoma === "colostomia" ? 1 : 2);
+    var idx = p.fase === "1" ? 0 : 1;
     var nivel = food.r.charAt(idx);
     var avisos = [];
     return { nivel: nivel, avisos: avisos };
@@ -165,7 +162,7 @@
     nivelFiltros: document.getElementById("filtros-nivel"),
     grupo: document.getElementById("filtro-grupo"),
     resumoPerfil: document.getElementById("resumo-perfil"),
-    avisoEstoma: document.getElementById("aviso-estoma")
+    notaFase2: document.getElementById("nota-fase2")
   };
 
   function pill(nivel) {
@@ -189,24 +186,18 @@
   function detalheHtml(food) {
     var av = avaliar(food, perfil);
     var cenarios = [
-      { rotulo: "Fase 1", p: { fase: "1", estoma: perfil.estoma }, atual: perfil.fase === "1" },
-      { rotulo: "Fase 2 · colostomia", p: { fase: "2", estoma: "colostomia" }, atual: perfil.fase === "2" && perfil.estoma === "colostomia" },
-      { rotulo: "Fase 2 · ileostomia", p: { fase: "2", estoma: "ileostomia" }, atual: perfil.fase === "2" && perfil.estoma !== "colostomia" }
+      { rotulo: "Fase 1", p: { fase: "1" }, atual: perfil.fase === "1" },
+      { rotulo: "Fase 2", p: { fase: "2" }, atual: perfil.fase === "2" }
     ];
 
     var extras = [];
-    var tem = function (t) { return food.tags.indexOf(t) >= 0; };
-
     if (perfil.fase === "1" && av.nivel !== "I") {
-      var f2 = avaliar(food, { fase: "2", estoma: perfil.estoma }).nivel;
+      var f2 = avaliar(food, { fase: "2" }).nivel;
       if (NIVEIS[f2].ordem < NIVEIS[av.nivel].ordem) {
         extras.push("Pode ser liberado na Fase 2, com autorização da equipe de saúde.");
       } else if (av.nivel === "E" && f2 === "E") {
         extras.push("Não é recomendado nem na Fase 2, salvo orientação da equipe.");
       }
-    }
-    if (tem("entope") && perfil.estoma !== "colostomia") {
-      extras.push("Na ileostomia o risco de entupir é maior, porque o intestino delgado é mais estreito que o cólon.");
     }
 
     var html = '<div class="detalhe-corpo">';
@@ -221,7 +212,7 @@
     });
     html += "</div>";
     if (!food.plano) {
-      html += '<p class="nota-estimada">Este alimento não aparece no plano alimentar de origem. Foi classificado pelos mesmos critérios (fibras, casca e sementes, gordura e gases). Confirme com a sua equipe.</p>';
+      html += '<p class="nota-estimada"><strong>Sugestão do app.</strong> Este alimento não está no plano alimentar. A classificação segue os mesmos critérios (fibras, casca e sementes, gordura e gases), mas não foi revisada por um profissional de saúde. Converse com a sua equipe antes de incluí-lo.</p>';
     }
     html += "</div>";
     return html;
@@ -233,7 +224,7 @@
     var estaAberto = aberto === food.nome;
     return '<li class="item nivel-' + av.nivel + (estaAberto ? " aberto" : "") + '">' +
       '<button type="button" class="item-cabeca" data-nome="' + esc(food.nome) + '" aria-expanded="' + estaAberto + '" aria-controls="' + id + '">' +
-      '<span class="item-texto"><span class="item-nome">' + esc(food.nome) + '</span><span class="item-grupo">' + esc(food.grupo) + "</span></span>" +
+      '<span class="item-texto"><span class="item-nome">' + esc(food.nome) + '</span><span class="item-grupo">' + esc(food.grupo) + (food.plano ? "" : " · sugestão") + "</span></span>" +
       pill(av.nivel) +
       "</button>" +
       '<div class="detalhe" id="' + id + '"' + (estaAberto ? "" : " hidden") + ">" + (estaAberto ? detalheHtml(food) : "") + "</div>" +
@@ -273,10 +264,8 @@
       var campo = inp.getAttribute("data-perfil");
       inp.checked = String(perfil[campo]) === inp.value;
     });
-    var partes = [perfil.fase === "1" ? "Fase 1" : "Fase 2"];
-    partes.push({ ileostomia: "ileostomia", colostomia: "colostomia", naosei: "tipo de estoma ainda não informado" }[perfil.estoma]);
-    el.resumoPerfil.textContent = partes.join(" · ");
-    el.avisoEstoma.hidden = !(perfil.fase === "2" && perfil.estoma === "naosei");
+    el.resumoPerfil.textContent = (perfil.fase === "1" ? "Fase 1" : "Fase 2") + " · colostomia";
+    el.notaFase2.hidden = perfil.fase !== "2";
   }
 
   function popularGrupos() {
