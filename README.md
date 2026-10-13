@@ -12,16 +12,19 @@ O conteúdo vem do doc "Plano Alimentar Semanal para Pessoa Estomizada (pós-res
 npx http-server . -p 8080
 ```
 
+## Para quem é
+
+Primeira versão feita para a **Geni** (73 anos). As premissas vêm do doc: adulta, já liberada pelo cirurgião para comer por via oral, sem alergias nem restrições extras. O app abre na **Fase 1** e, como ainda não se sabe se o estoma é ileostomia ou colostomia, na Fase 2 usa a regra mais cautelosa (ileostomia).
+
 ## O que o app considera
 
-O perfil fica salvo no próprio navegador (nada é enviado a servidor):
+O que ela escolhe fica salvo no próprio navegador (nada é enviado a servidor):
 
 - **Fase 1**: dieta pobre em resíduos, até 6 a 8 semanas após a cirurgia.
 - **Fase 2**: reintrodução gradual de fibras, com liberação da equipe.
-- **Tipo de estoma**: ileostomia ou colostomia. Se a pessoa não informar, na Fase 2 vale a regra mais cautelosa (ileostomia).
-- **Intolerância à lactose** e **diabetes**: rebaixam a classificação de alimentos com lactose ou açúcar.
+- **Tipo de estoma**: ileostomia, colostomia ou "ainda não sei".
 
-Cada alimento mostra o veredito para o perfil, o motivo, os efeitos no estoma (firma, solta, gases, odor, risco de entupir…) e a classificação em cada fase.
+Cada alimento mostra o veredito para ela, o motivo, os efeitos no estoma (firma, solta, gases, odor, risco de entupir…) e a classificação em cada fase. A letra é grande e os botões têm área de toque ampla.
 
 ## Arquivos
 

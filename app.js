@@ -3,7 +3,7 @@
 
   var ALIMENTOS = window.ALIMENTOS;
   var GRUPOS = window.GRUPOS;
-  var STORAGE_KEY = "posso-comer:perfil:v1";
+  var STORAGE_KEY = "posso-comer-geni:perfil:v1";
 
   var NIVEIS = {
     I: { rotulo: "Indicado", icone: "✓", ordem: 0 },
@@ -29,7 +29,6 @@
   };
   var TAGS_POSITIVAS = { firma: 1, antiodor: 1, lactose_baixa: 1 };
 
-  var perfilSalvo = false;
   var perfil = carregarPerfil();
   var aberto = null;
   var filtroNivel = "";
@@ -64,16 +63,13 @@
   }
 
   function carregarPerfil() {
-    var padrao = { fase: "1", estoma: "naosei", lactose: false, diabetes: false };
+    var padrao = { fase: "1", estoma: "naosei" };
     try {
       var salvo = JSON.parse(localStorage.getItem(STORAGE_KEY));
       if (salvo && typeof salvo === "object") {
-        perfilSalvo = true;
         return {
           fase: salvo.fase === "2" ? "2" : "1",
-          estoma: ["ileostomia", "colostomia", "naosei"].indexOf(salvo.estoma) >= 0 ? salvo.estoma : "naosei",
-          lactose: !!salvo.lactose,
-          diabetes: !!salvo.diabetes
+          estoma: ["ileostomia", "colostomia", "naosei"].indexOf(salvo.estoma) >= 0 ? salvo.estoma : "naosei"
         };
       }
     } catch (e) { /* armazenamento indisponível: segue com o padrão */ }
@@ -88,37 +84,13 @@
 
   function piorNivel(a, b) { return NIVEIS[a].ordem >= NIVEIS[b].ordem ? a : b; }
 
-  // Retorna { nivel, avisos } do alimento para um perfil.
+  // Retorna { nivel, avisos } do alimento para um perfil (fase e tipo de estoma).
   function avaliar(food, p) {
     var idx = p.fase === "1" ? 0 : (p.estoma === "colostomia" ? 1 : 2);
     var nivel = food.r.charAt(idx);
     var avisos = [];
-    var tem = function (t) { return food.tags.indexOf(t) >= 0; };
-
-    if (p.lactose) {
-      if (tem("lactose")) {
-        nivel = piorNivel(nivel, "E");
-        avisos.push("Você informou intolerância à lactose e este alimento contém lactose. Procure a versão sem lactose.");
-      } else if (tem("lactose_media")) {
-        nivel = piorNivel(nivel, "C");
-        avisos.push("Você informou intolerância à lactose. Este alimento pode conter lactose; prefira a versão sem lactose.");
-      } else if (tem("lactose_baixa")) {
-        avisos.push("Tem pouca lactose, mas observe se há gases ou diarreia.");
-      }
-    }
-    if (p.diabetes) {
-      if (tem("doce")) {
-        nivel = piorNivel(nivel, "E");
-        avisos.push("Você informou diabetes e este alimento tem muito açúcar.");
-      } else if (tem("acucar")) {
-        nivel = piorNivel(nivel, "C");
-        avisos.push("Você informou diabetes e este alimento contém açúcar. Combine as porções com o nutricionista.");
-      }
-    }
     return { nivel: nivel, avisos: avisos };
   }
-
-  function perfilAtual() { return perfil; }
 
   /* ---------- busca ---------- */
 
@@ -217,16 +189,16 @@
   function detalheHtml(food) {
     var av = avaliar(food, perfil);
     var cenarios = [
-      { rotulo: "Fase 1", p: { fase: "1", estoma: perfil.estoma, lactose: perfil.lactose, diabetes: perfil.diabetes }, atual: perfil.fase === "1" },
-      { rotulo: "Fase 2 · colostomia", p: { fase: "2", estoma: "colostomia", lactose: perfil.lactose, diabetes: perfil.diabetes }, atual: perfil.fase === "2" && perfil.estoma === "colostomia" },
-      { rotulo: "Fase 2 · ileostomia", p: { fase: "2", estoma: "ileostomia", lactose: perfil.lactose, diabetes: perfil.diabetes }, atual: perfil.fase === "2" && perfil.estoma !== "colostomia" }
+      { rotulo: "Fase 1", p: { fase: "1", estoma: perfil.estoma }, atual: perfil.fase === "1" },
+      { rotulo: "Fase 2 · colostomia", p: { fase: "2", estoma: "colostomia" }, atual: perfil.fase === "2" && perfil.estoma === "colostomia" },
+      { rotulo: "Fase 2 · ileostomia", p: { fase: "2", estoma: "ileostomia" }, atual: perfil.fase === "2" && perfil.estoma !== "colostomia" }
     ];
 
     var extras = [];
     var tem = function (t) { return food.tags.indexOf(t) >= 0; };
 
     if (perfil.fase === "1" && av.nivel !== "I") {
-      var f2 = avaliar(food, { fase: "2", estoma: perfil.estoma, lactose: perfil.lactose, diabetes: perfil.diabetes }).nivel;
+      var f2 = avaliar(food, { fase: "2", estoma: perfil.estoma }).nivel;
       if (NIVEIS[f2].ordem < NIVEIS[av.nivel].ordem) {
         extras.push("Pode ser liberado na Fase 2, com autorização da equipe de saúde.");
       } else if (av.nivel === "E" && f2 === "E") {
@@ -299,13 +271,10 @@
   function renderPerfil() {
     document.querySelectorAll("[data-perfil]").forEach(function (inp) {
       var campo = inp.getAttribute("data-perfil");
-      if (inp.type === "radio") inp.checked = String(perfil[campo]) === inp.value;
-      else inp.checked = !!perfil[campo];
+      inp.checked = String(perfil[campo]) === inp.value;
     });
     var partes = [perfil.fase === "1" ? "Fase 1" : "Fase 2"];
-    partes.push({ ileostomia: "ileostomia", colostomia: "colostomia", naosei: "estoma não informado" }[perfil.estoma]);
-    if (perfil.lactose) partes.push("sem lactose");
-    if (perfil.diabetes) partes.push("diabetes");
+    partes.push({ ileostomia: "ileostomia", colostomia: "colostomia", naosei: "tipo de estoma ainda não informado" }[perfil.estoma]);
     el.resumoPerfil.textContent = partes.join(" · ");
     el.avisoEstoma.hidden = !(perfil.fase === "2" && perfil.estoma === "naosei");
   }
@@ -356,7 +325,7 @@
   document.querySelectorAll("[data-perfil]").forEach(function (inp) {
     inp.addEventListener("change", function () {
       var campo = inp.getAttribute("data-perfil");
-      perfil[campo] = inp.type === "checkbox" ? inp.checked : inp.value;
+      perfil[campo] = inp.value;
       salvarPerfil();
       renderPerfil();
       renderLista();
@@ -369,6 +338,5 @@
 
   popularGrupos();
   renderPerfil();
-  document.querySelector(".perfil").open = !perfilSalvo;
   renderLista();
 })();

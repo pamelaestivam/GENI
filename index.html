@@ -4,15 +4,15 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
-  <meta name="description" content="Pesquise um alimento e veja se ele é indicado para quem tem estoma após ressecção intestinal.">
-  <title>Posso comer? Guia para estomizados</title>
+  <meta name="description" content="Guia de alimentação da Geni: pesquise um alimento e veja se ele é indicado para o seu caso.">
+  <title>Posso comer? Guia da Geni</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header class="topo">
     <div class="conteudo">
       <h1>Posso comer?</h1>
-      <p class="sub">Pesquise um alimento e veja se é indicado para o seu caso. Guia para quem tem estoma após ressecção intestinal.</p>
+      <p class="sub">Olá, Geni! Pesquise um alimento e veja se ele é indicado para você neste momento.</p>
     </div>
   </header>
 
@@ -20,7 +20,7 @@
 
     <details class="cartao perfil">
       <summary>
-        <span class="perfil-titulo">Seu caso</span>
+        <span class="perfil-titulo">Seu momento</span>
         <span class="perfil-resumo" id="resumo-perfil"></span>
       </summary>
 
@@ -31,19 +31,14 @@
       </fieldset>
 
       <fieldset>
-        <legend>Qual é o seu estoma?</legend>
+        <legend>Qual é o seu estoma? (quando souber, escolha aqui)</legend>
         <label class="opcao"><input type="radio" name="estoma" value="ileostomia" data-perfil="estoma"> <span>Ileostomia</span></label>
         <label class="opcao"><input type="radio" name="estoma" value="colostomia" data-perfil="estoma"> <span>Colostomia</span></label>
-        <label class="opcao"><input type="radio" name="estoma" value="naosei" data-perfil="estoma"> <span>Não sei / prefiro não informar</span></label>
-        <p class="ajuda" id="aviso-estoma" hidden>Sem essa informação, o app usa a regra mais cautelosa (a da ileostomia) na Fase 2.</p>
+        <label class="opcao"><input type="radio" name="estoma" value="naosei" data-perfil="estoma"> <span>Ainda não sei</span></label>
+        <p class="ajuda" id="aviso-estoma" hidden>Sem essa informação, na Fase 2 o app usa a regra mais cautelosa (a da ileostomia).</p>
       </fieldset>
 
-      <fieldset>
-        <legend>Outras condições</legend>
-        <label class="opcao"><input type="checkbox" data-perfil="lactose"> <span>Tenho intolerância à lactose</span></label>
-        <label class="opcao"><input type="checkbox" data-perfil="diabetes"> <span>Tenho diabetes</span></label>
-        <p class="ajuda">Quem faz quimioterapia, tem doença renal ou outra condição deve seguir o plano da própria equipe. O app não considera esses casos.</p>
-      </fieldset>
+      <p class="ajuda">A Fase 2 só começa com a liberação da sua equipe de saúde. Se houver mudança no tratamento, como quimioterapia, siga o plano que a equipe passar.</p>
     </details>
 
     <section aria-labelledby="titulo-busca">
@@ -88,7 +83,7 @@
         <li>Faça seis refeições pequenas por dia (três principais e três lanches), com proteína em todas.</li>
         <li>Mastigue bem e coma devagar. Evite canudo, refrigerante e chiclete, que aumentam os gases.</li>
         <li>Teste <strong>um alimento novo por vez</strong>, em porção pequena, bem cozido e bem mastigado. Espere 1 a 2 horas para ver a reação e teste de novo antes de descartá-lo.</li>
-        <li>Beba 8 a 10 copos de 200 mL por dia, em goles pequenos; na ileostomia a necessidade costuma ser maior. Sinais de desidratação: sede intensa, boca seca, urina escura ou pouca, tontura e câimbras.</li>
+        <li>Beba 8 a 10 copos de 200 mL por dia, em goles pequenos; na ileostomia a necessidade costuma ser maior. Com o passar dos anos a sede diminui, então beba aos poucos mesmo sem sentir sede. Sinais de desidratação: sede intensa, boca seca, urina escura ou pouca, tontura e câimbras.</li>
         <li>Use sal normal na comida, a menos que o médico restrinja.</li>
         <li>Anote os alimentos novos e as reações do estoma e leve às consultas.</li>
       </ul>
