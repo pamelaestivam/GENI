@@ -1,5 +1,5 @@
 /* Modo offline: guarda os arquivos do app e atualiza em segundo plano a cada visita. */
-var CACHE = "posso-comer-v1";
+var CACHE = "posso-comer-v2";
 var ARQUIVOS = [
   "./",
   "index.html",
