@@ -1,4 +1,4 @@
-# Posso comer?
+# O que a Geni pode comer?
 
 App em português (pt-BR) para pessoas com estoma após ressecção intestinal. A pessoa pesquisa um alimento e vê se ele é **indicado**, **com cautela** ou **para evitar** no caso dela.
 

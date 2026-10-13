@@ -1,6 +1,6 @@
 {
-  "name": "Posso comer? Guia da Geni",
-  "short_name": "Posso comer?",
+  "name": "O que a Geni pode comer?",
+  "short_name": "Geni pode comer",
   "description": "Pesquise um alimento e veja se ele é indicado para o seu caso.",
   "lang": "pt-BR",
   "start_url": "./",

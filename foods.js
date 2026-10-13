@@ -1,5 +1,5 @@
 /*
- * Base de alimentos do app "Posso comer?".
+ * Base de alimentos do app "O que a Geni pode comer?".
  *
  * Cada alimento tem duas classificações, na ordem da string `r` (já para colostomia):
  *   1º caractere: Fase 1 (dieta pobre em resíduos, ~6 a 8 semanas após a cirurgia)
